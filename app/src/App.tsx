@@ -1,16 +1,18 @@
 import "bootstrap/dist/css/bootstrap.css";
 import { useState } from "react";
 import { ITodo } from "./types";
-
+import { Suspense } from "react";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import TodoList from "./components/TodoList";
 import AddTodo from "./components/AddTodo";
 
 function App() {
   const [todos, setTodos] = useState<ITodo[]>([]);
 
-  function onTodoAdd(str: string) {
+  function onTodoAdd(str: string , str1:number) {
     const obj: ITodo = {
       text: str,
+      year:str1,
       id: new Date().getTime(),
       isDone: false,
       isEdit: false,
@@ -51,17 +53,39 @@ function App() {
     }
     setTodos(newTodos);
   }
+  function Loading() {
+    return <p>Loading ...</p>;
+  }
   return (
+    <div>
     <div className="container m-4">
       <h1 className="mb-4">My Todos</h1>
-      <AddTodo onTodoAdd={onTodoAdd} />
+      {/* <AddTodo onTodoAdd={onTodoAdd} />
       <TodoList
         todos={todos}
         handleDelete={handleDelete}
         handleEdit={handleEdit}
         handleUpdate={handleUpdate}
         handleStrike={handleStrike}
-      />
+      /> */}
+    </div>
+    <div>
+    {/* <Home /> */}
+    <Suspense fallback={<Loading />}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<TodoList  todos={todos}
+        handleDelete={handleDelete}
+        handleEdit={handleEdit}
+        handleUpdate={handleUpdate}
+        handleStrike={handleStrike} />} />
+          <Route path="/Add" element={<AddTodo  onTodoAdd={onTodoAdd} />} />
+
+          
+        </Routes>
+      </BrowserRouter>
+    </Suspense>
+    </div>
     </div>
   );
 }

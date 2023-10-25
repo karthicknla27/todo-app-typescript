@@ -1,16 +1,25 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom'; 
+
 
 interface IAddTodo {
-  onTodoAdd: (str: string) => void;
+  onTodoAdd: (str: string , str1:number) => void;
 }
 
 const AddTodo: React.FC<IAddTodo> = ({ onTodoAdd }) => {
   const [text, setText] = useState("");
+  const [year, setyear] = useState(0);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const navigate = useNavigate(); 
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) { 
+
     e.preventDefault();
-    onTodoAdd(text);
+    onTodoAdd(text,year);
     setText("");
+    setyear(0);
+    navigate('/');  
+
   }
 
   return (
@@ -22,6 +31,13 @@ const AddTodo: React.FC<IAddTodo> = ({ onTodoAdd }) => {
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
+          required
+        />
+         <input
+          className=""
+          type="number"
+          value={year}
+          onChange={(e:any) => setyear(e.target.value)}
           required
         />
       </label>

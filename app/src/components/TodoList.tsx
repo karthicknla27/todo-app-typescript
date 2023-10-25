@@ -53,6 +53,7 @@ const TodoList: React.FC<ITodoList> = ({
                 style={t.isDone ? { textDecoration: "line-through" } : {}}
               >
                 {t.text}
+                {t.year}
               </span>
               <div>
                 <button
@@ -72,6 +73,7 @@ const TodoList: React.FC<ITodoList> = ({
           )}
         </div>
       ))}
+      <h1>hiiii</h1>
     </div>
   );
 };
