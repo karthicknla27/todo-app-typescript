@@ -1,6 +1,6 @@
 export interface ITodo {
   id: Number;
-  text: string;
+  title: string;
   year:number ;
   isDone: boolean;
   isEdit: boolean;

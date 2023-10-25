@@ -1,81 +1,45 @@
-import { ITodo } from "../types";
-import EditTodo from "./EditTodo";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
-interface ITodoList {
-  todos: ITodo[];
-  extraCss?: string;
-  handleDelete: (n: Number) => void;
-  handleEdit: (n: Number) => void;
-  handleUpdate: (n: Number, t: string) => void;
-  handleStrike: (n: Number, t: string) => void;
+interface Todo {
+  id: number;
+  title: string;
+  year: number;
 }
 
-const TodoList: React.FC<ITodoList> = ({
-  todos,
-  handleDelete,
-  handleEdit,
-  handleUpdate,
-  handleStrike,
-}) => {
-  function handleSave(id: Number, value: string) {
-    if (value) {
-      handleUpdate(id, value);
-    }
-  }
+const API_BASE_URL = 'http://localhost:5476'; // Replace with your API URL
 
-  function handleCheck(e: React.ChangeEvent<HTMLInputElement>, id: Number) {
-    if (e.target.checked) {
-      handleStrike(id, "done");
-    } else {
-      handleStrike(id, "undone");
-    }
-  }
+const TodoList: React.FC = () => {
+  const [todos, setTodos] = useState<Todo[]>([]);
+
+  useEffect(() => {
+    // Fetch all todos when the component mounts
+    axios.get<Todo[]>(`${API_BASE_URL}/movies`)
+      .then(response => {
+        setTodos(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching todos:', error);
+      });
+  }, []);
 
   return (
     <div>
-      {todos.map((t) => (
-        <div key={t.id.toString()}>
-          {t.isEdit ? (
-            <>
-              <EditTodo item={t} handleSave={handleSave} />
-            </>
-          ) : (
-            <div className="input-group-text justify-content-between mb-3 col-sm-6">
-              <input
-                type="checkbox"
-                // name={t.text}
-                id={`text-${t.id}`}
-                checked={t.isDone}
-                onChange={(e) => handleCheck(e, t.id)}
-              />
-              <span
-                className="px-3"
-                style={t.isDone ? { textDecoration: "line-through" } : {}}
-              >
-                {t.text}
-                {t.year}
-              </span>
-              <div>
-                <button
-                  className="btn btn-outline-secondary btn-sm mx-2"
-                  onClick={() => handleDelete(t.id)}
-                >
-                  Delete
-                </button>
-                <button
-                  className="btn btn-outline-secondary btn-sm"
-                  onClick={() => handleEdit(t.id)}
-                >
-                  Edit
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
-      <h1>hiiii</h1>
+      <h1>Movies</h1>
+      <ul>
+        {todos.map(todo => (
+          <li key={todo.id}>
+           movie- {todo.title}- Year: {todo.year}
+
+            <Link to={`/edit/${todo.id}`}>edit</Link>
+          </li>
+        ))}
+      </ul>
+      <Link to="/add">Add Todo</Link>
+
     </div>
   );
-};
+}
 
 export default TodoList;

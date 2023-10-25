@@ -1,51 +1,55 @@
-import { useState } from "react";
-import { useNavigate } from 'react-router-dom'; 
+import React, { useState } from 'react';
+import axios from 'axios';
 
-
-interface IAddTodo {
-  onTodoAdd: (str: string , str1:number) => void;
+interface Todo {
+  title: string;
+  year: number;
 }
 
-const AddTodo: React.FC<IAddTodo> = ({ onTodoAdd }) => {
-  const [text, setText] = useState("");
-  const [year, setyear] = useState(0);
+const API_BASE_URL = 'http://your-api-url.com'; // Replace with your API URL
 
-  const navigate = useNavigate(); 
+const AddTodo: React.FC = () => {
+  const [todo, setTodo] = useState<Todo>({ title: '', year: 0 });
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) { 
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTodo({ ...todo, title: e.target.value });
+  };
 
-    e.preventDefault();
-    onTodoAdd(text,year);
-    setText("");
-    setyear(0);
-    navigate('/');  
+  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTodo({ ...todo, year: Number(e.target.value) });
+  };
 
-  }
+  const handleSave = () => {
+    // Send a POST request to create a new todo
+    axios.post(`http://localhost:5476/movies`, todo)
+      .then(response => {
+        console.log('Todo created:', response.data);
+        // Redirect to the todo list after creating a new todo
+        window.location.href = '/';
+      })
+      .catch(error => {
+        console.error('Error creating todo:', error);
+      });
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="mb-4">
-      <label>
-        Enter Task Todo:
-        <input
-          className="form-control"
-          type="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          required
-        />
-         <input
-          className=""
-          type="number"
-          value={year}
-          onChange={(e:any) => setyear(e.target.value)}
-          required
-        />
-      </label>
-      <button type="submit" className="btn btn-secondary mx-4">
-        Add Todo
-      </button>
-    </form>
+    <div>
+      <h2>Add Todo</h2>
+      <input
+        type="text"
+        placeholder="Title"
+        value={todo.title}
+        onChange={handleTitleChange}
+      />
+      <input
+        type="number"
+        placeholder="Year"
+        value={todo.year}
+        onChange={handleYearChange}
+      />
+      <button onClick={handleSave}>Save</button>
+    </div>
   );
-};
+}
 
 export default AddTodo;
