@@ -1,14 +1,8 @@
-import { Routes, Route, BrowserRouter,Link,useParams } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import TodoList from './components/TodoList';
 import EditTodo from './components/EditTodo';
 import AddTodo from './components/AddTodo';
 
-
-
-
-
-
- 
 function App() {
   return (
     <BrowserRouter>

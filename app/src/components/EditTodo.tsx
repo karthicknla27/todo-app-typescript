@@ -2,20 +2,22 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
+import Modal from './Modal';
+
 interface Todo {
   id: number;
   title: string;
   year: number;
 }
 
-const API_BASE_URL = 'http://your-api-url.com'; // Replace with your API URL
 
 const EditTodo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [todo, setTodo] = useState<Todo>({ id: 0, title: '', year: 0 });
+  const [apiSuccess, setApiSuccess] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
-    // Fetch the todo by ID when the component mounts
     axios.get<Todo>(`http://localhost:5476/movies/${id}`)
       .then(response => {
         setTodo(response.data);
@@ -40,14 +42,23 @@ const EditTodo: React.FC = () => {
         console.log('Todo updated:', response.data);
         // Redirect to the todo list after updating the todo
         window.location.href = '/';
+        setApiSuccess(true);
+
       })
       .catch(error => {
         console.error('Error updating todo:', error);
       });
   };
+  useEffect(() => {
+    if (apiSuccess) {
+      setShowSuccessModal(true);
+    }
+  }, [apiSuccess]);
 
   return (
     <div>
+    
+ 
       <h2>Edit Todo</h2>
       <input
         type="text"

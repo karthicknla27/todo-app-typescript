@@ -8,14 +8,12 @@ interface Todo {
   year: number;
 }
 
-const API_BASE_URL = 'http://localhost:5476'; // Replace with your API URL
 
 const TodoList: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    // Fetch all todos when the component mounts
-    axios.get<Todo[]>(`${API_BASE_URL}/movies`)
+    axios.get<Todo[]>(`http://localhost:5476/movies`)
       .then(response => {
         setTodos(response.data);
       })
@@ -37,6 +35,7 @@ const TodoList: React.FC = () => {
         ))}
       </ul>
       <Link to="/add">Add Todo</Link>
+
 
     </div>
   );

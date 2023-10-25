@@ -6,7 +6,6 @@ interface Todo {
   year: number;
 }
 
-const API_BASE_URL = 'http://your-api-url.com'; // Replace with your API URL
 
 const AddTodo: React.FC = () => {
   const [todo, setTodo] = useState<Todo>({ title: '', year: 0 });
@@ -20,11 +19,9 @@ const AddTodo: React.FC = () => {
   };
 
   const handleSave = () => {
-    // Send a POST request to create a new todo
     axios.post(`http://localhost:5476/movies`, todo)
       .then(response => {
         console.log('Todo created:', response.data);
-        // Redirect to the todo list after creating a new todo
         window.location.href = '/';
       })
       .catch(error => {
