@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-import Modal from './Modal';
 
 interface Todo {
   id: number;
@@ -15,7 +14,6 @@ const EditTodo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [todo, setTodo] = useState<Todo>({ id: 0, title: '', year: 0 });
   const [apiSuccess, setApiSuccess] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   useEffect(() => {
     axios.get<Todo>(`http://localhost:5476/movies/${id}`)
@@ -36,7 +34,6 @@ const EditTodo: React.FC = () => {
   };
 
   const handleSave = () => {
-    // Send a PUT request to update the todo
     axios.put(`http://localhost:5476/movies/${id}`, todo)
       .then(response => {
         console.log('Todo updated:', response.data);
@@ -51,7 +48,6 @@ const EditTodo: React.FC = () => {
   };
   useEffect(() => {
     if (apiSuccess) {
-      setShowSuccessModal(true);
     }
   }, [apiSuccess]);
 
